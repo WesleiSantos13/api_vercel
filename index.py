@@ -5,14 +5,17 @@ import os
 
 app = Flask(__name__)
 
-# 🔌 conexão com banco (Vercel usa variável de ambiente)
+# 🔌 conexão com banco
 DATABASE_URL = os.getenv("DATABASE_URL")
+
+if not DATABASE_URL:
+    raise Exception("DATABASE_URL não definida!")
 
 engine = create_engine(DATABASE_URL)
 SessionLocal = sessionmaker(bind=engine)
 Base = declarative_base()
 
-# 🗄️ modelo da tabela
+# 🗄️ modelo
 class Message(Base):
     __tablename__ = "messages"
 
@@ -21,7 +24,7 @@ class Message(Base):
     message = Column(String)
     author = Column(String)
 
-# cria tabela automaticamente (na primeira execução)
+# cria tabela
 Base.metadata.create_all(bind=engine)
 
 
@@ -40,6 +43,7 @@ def update_message():
     db.add(new_message)
     db.commit()
     db.refresh(new_message)
+    db.close()
 
     return jsonify({
         "status": "saved",
@@ -58,6 +62,7 @@ def get_message():
     db = SessionLocal()
 
     message = db.query(Message).order_by(Message.id.desc()).first()
+    db.close()
 
     if not message:
         return jsonify({"error": "Nenhuma mensagem encontrada"}), 404
@@ -70,5 +75,6 @@ def get_message():
     }), 200
 
 
-# 🔥 handler para Vercel
-handler = app
+# 🚀 rodar local / produção
+if __name__ == "__main__":
+    app.run(host="0.0.0.0", port=5000)
