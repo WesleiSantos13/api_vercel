@@ -4,9 +4,9 @@ app = Flask(__name__)
 
 data_msm = {}
 
-@app.route("/api/message", methods=["PUT"])
+@app.route("/api/message", methods=["POST"])
 def update_message():
-    data = request.get_json()
+    data = request.get_json(force=True)
 
     data_msm["message"] = {
         "action": data["action"],
