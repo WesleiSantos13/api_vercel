@@ -11,7 +11,7 @@ DATABASE_URL = os.getenv("DATABASE_URL")
 if not DATABASE_URL:
     raise Exception("DATABASE_URL não definida!")
 
-# 🔥 ajuste importante (Railway/Postgres)
+# /Postgres)
 if DATABASE_URL.startswith("postgres://"):
     DATABASE_URL = DATABASE_URL.replace("postgres://", "postgresql://", 1)
 
@@ -38,7 +38,7 @@ class Message(Base):
 Base.metadata.create_all(bind=engine)
 
 
-# ✅ POST → salvar mensagem
+# POST
 @app.route("/messagem", methods=["POST"])
 def update_message():
     data = request.get_json(force=True)
@@ -70,7 +70,7 @@ def update_message():
     }), 201
 
 
-# ✅ GET → pegar última mensagem
+# GET
 @app.route("/message", methods=["GET"])
 def get_message():
     db = SessionLocal()
@@ -89,7 +89,7 @@ def get_message():
     }), 200
 
 
-# 🔥 health check (IMPORTANTE)
+# testar
 @app.route("/")
 def home():
     return "API com PostgreSQL funcionando", 200
