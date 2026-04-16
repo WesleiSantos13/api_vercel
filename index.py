@@ -72,21 +72,24 @@ def update_message():
 
 # GET
 @app.route("/message", methods=["GET"])
-def get_message():
+def get_messages():
     db = SessionLocal()
 
-    message = db.query(Message).order_by(Message.id.desc()).all()
+    messages = db.query(Message).order_by(Message.id.desc()).all()
     db.close()
 
-    if not message:
+    if not messages:
         return jsonify({"error": "Nenhuma mensagem encontrada"}), 404
 
-    return jsonify({
-        "id": message.id,
-        "action": message.action,
-        "message": message.message,
-        "author": message.author
-    }), 200
+    return jsonify([
+        {
+            "id": msg.id,
+            "action": msg.action,
+            "message": msg.message,
+            "author": msg.author
+        }
+        for msg in messages
+    ]), 200
 
 
 # testar
