@@ -5,7 +5,7 @@ import os
 
 app = Flask(__name__)
 
-# 🔌 conexão com banco
+# conexão com banco
 DATABASE_URL = os.getenv("DATABASE_URL")
 
 if not DATABASE_URL:
