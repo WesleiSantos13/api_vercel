@@ -75,7 +75,7 @@ def update_message():
 def get_message():
     db = SessionLocal()
 
-    message = db.query(Message).order_by(Message.id.desc()).first()
+    message = db.query(Message).order_by(Message.id.desc()).all()
     db.close()
 
     if not message:
