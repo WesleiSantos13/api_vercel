@@ -39,7 +39,7 @@ Base.metadata.create_all(bind=engine)
 
 
 # ✅ POST → salvar mensagem
-@app.route("/message", methods=["POST"])
+@app.route("/messagem", methods=["POST"])
 def update_message():
     data = request.get_json(force=True)
 
